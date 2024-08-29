@@ -4,20 +4,32 @@
 import PackageDescription
 
 let package = Package(
-    name: "http_client",
+    name: "swift-http-client",
+    platforms: [
+      .iOS(.v17),
+      .macOS(.v14)
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "http_client",
-            targets: ["http_client"]),
+            name: "swift-http-client",
+            targets: ["swift-http-client"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-http-types.git", from: "1.3.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "http_client"),
+            name: "swift-http-client",
+            dependencies: [
+              .product(name: "HTTPTypes", package: "swift-http-types"),
+              .product(name: "HTTPTypesFoundation", package: "swift-http-types")
+            ]
+        ),
         .testTarget(
             name: "http_clientTests",
-            dependencies: ["http_client"]),
+            dependencies: ["swift-http-client"]),
     ]
 )
