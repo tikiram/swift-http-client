@@ -2,7 +2,8 @@ import Foundation
 import HTTPTypes
 
 public class ClientLogger: Client.Middleware {
-  public func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn) async throws
+  public func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn)
+    async throws
     -> (Data, HTTPResponse)
   {
 
