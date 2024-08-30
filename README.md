@@ -11,7 +11,7 @@ dependencies: [
 ]
 ```
 
-Add the dependency to target
+Add the dependency to the target
 
 ```
 dependencies: [
@@ -32,4 +32,29 @@ let client = Client(
 
 try await client.request(.get, "/users")
 
+```
+
+
+### Middlewares
+
+E.g.
+
+```swift
+class ClientAppAuth: Client.Middleware {
+
+  private let appAuth: AppAuth
+
+  init(_ appAuth: AppAuth) {
+    self.appAuth = appAuth
+  }
+
+  func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn)
+    async throws -> (Data, HTTPResponse)
+  {
+    let accessToken = try await appAuth.getAccessToken()
+    let authorization = "Bearer \(accessToken)"
+    request.headerFields[.authorization] = authorization
+    return try await next(&request, payloadData)
+  }
+}
 ```
