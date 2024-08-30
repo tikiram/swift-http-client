@@ -14,14 +14,17 @@ dependencies: [
 Add the dependency to the target
 
 ```
-dependencies: [
-  .product(name: "HTTPClient", package: "swift-http-client"),
-]
+.target(
+    name: "EquanimousoftAuth", dependencies: [
+      .product(name: "HTTPClient", package: "swift-http-client"),
+    ]),
 ```
 
 ## Usage
 
 ```swift
+import HTTPClient
+
 let client = Client(
       base: "api.example.com",
       middlewares: [
@@ -40,6 +43,8 @@ try await client.request(.get, "/users")
 E.g.
 
 ```swift
+import HTTPClient
+
 class ClientAppAuth: Client.Middleware {
 
   private let appAuth: AppAuth

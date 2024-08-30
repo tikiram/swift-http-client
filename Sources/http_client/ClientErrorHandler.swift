@@ -8,19 +8,8 @@ class ClientErrorHandler: Client.Middleware {
 
     let (data, response) = try await next(&request, payloadData)
 
-    guard [200, 204].contains(response.status) else {
-      if let contentType = response.headerFields[.contentType],
-        contentType.contains("application/json")
-      {
-        // TODO: charset is ignored here
-        throw ClientError.badJsonResponse(
-          response: response,
-          data: data
-        )
-      }
-
-      let body = String(data: data, encoding: .utf8) ?? "(nil)"
-      throw ClientError.badResponse(response: response, body: body)
+    guard response.status.kind == .successful else {
+      throw ClientError.badResponse(response: response, data: data)
     }
 
     return (data, response)
