@@ -19,7 +19,7 @@ public class Client {
   private let jsonEncoder: JSONEncoder
   private let jsonDecoder: JSONDecoder
 
-  init(base: String, middlewares: [Middleware]) {
+  public init(base: String, middlewares: [Middleware]) {
     self.base = base
     self.middlewares = middlewares
     // TODO: get encoder/decoder from parameters 
