@@ -2,7 +2,12 @@ import Foundation
 import HTTPTypes
 
 public class ClientErrorHandler: Client.Middleware {
-  public func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn) async throws
+
+  public init() {
+  }
+
+  public func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn)
+    async throws
     -> (Data, HTTPResponse)
   {
 

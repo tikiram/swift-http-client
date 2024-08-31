@@ -22,7 +22,7 @@ public class Client {
   public init(base: String, middlewares: [Middleware]) {
     self.base = base
     self.middlewares = middlewares
-    // TODO: get encoder/decoder from parameters 
+    // TODO: get encoder/decoder from parameters
     self.jsonEncoder = JSONEncoder()
     self.jsonDecoder = JSONDecoder()
 

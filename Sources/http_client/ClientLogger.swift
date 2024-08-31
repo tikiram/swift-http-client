@@ -6,7 +6,10 @@ public class ClientLogger: Client.Middleware {
   // it can be using a flag from the constructor
   // or it can be use an env variable (prod, dev, etc)
   // TODO: are json being pretty printed?
-  
+
+  public init() {
+  }
+
   public func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn)
     async throws
     -> (Data, HTTPResponse)
