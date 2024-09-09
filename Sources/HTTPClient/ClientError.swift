@@ -2,15 +2,8 @@ import Foundation
 import HTTPTypes
 
 public enum ClientError: Error {
-  
-  public struct Extra {
-    public let subreason: String?
-  }
-  
-  case badResponse(response: HTTPResponse, data: Data, extra: Extra)
+  case badResponse(response: HTTPResponse, data: Data)
 }
-
-
 
 extension HTTPResponse {
   public var isContentTypeJSON: Bool {
