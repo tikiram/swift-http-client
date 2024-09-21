@@ -1,7 +1,7 @@
 import Foundation
 import HTTPTypes
 
-public class ClientLogger: Client.Middleware {
+final public class ClientLogger: Client.Middleware {
   // TODO: check how to enable/disable these logs
   // it can be using a flag from the constructor
   // or it can be use an env variable (prod, dev, etc)

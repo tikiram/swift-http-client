@@ -1,7 +1,7 @@
 import Foundation
 import HTTPTypes
 
-public class ClientErrorHandler: Client.Middleware {
+final public class ClientErrorHandler: Client.Middleware {
 
   public init() {
   }
