@@ -19,15 +19,16 @@ final public class Client: Sendable {
   private let jsonEncoder: JSONEncoder
   private let jsonDecoder: JSONDecoder
 
-  public init(base: String, middlewares: [Middleware]) {
+  public init(
+    base: String,
+    middlewares: [Middleware],
+    jsonEncoder: JSONEncoder = JSONEncoder(),
+    jsonDecoder: JSONDecoder = JSONDecoder()
+  ) {
     self.base = base
     self.middlewares = middlewares
-    // TODO: get encoder/decoder from parameters
-    self.jsonEncoder = JSONEncoder()
-    self.jsonDecoder = JSONDecoder()
-
-    self.jsonEncoder.dateEncodingStrategy = .millisecondsSince1970
-    self.jsonDecoder.dateDecodingStrategy = .millisecondsSince1970
+    self.jsonEncoder = jsonEncoder
+    self.jsonDecoder = jsonDecoder
   }
 
   public func request<T: Decodable>(
