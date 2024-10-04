@@ -1,20 +1,25 @@
 import Foundation
 import HTTPTypes
 
-final public class ClientLogger: Client.Middleware {
+final public class LoggerMiddleware: HTTPClient.Middleware {
   // TODO: check how to enable/disable these logs
   // it can be using a flag from the constructor
   // or it can be use an env variable (prod, dev, etc)
 
-
-  public init() {
+  private let enabled: Bool
+  
+  public init(_ enabled: Bool = true) {
+    self.enabled = enabled
   }
 
-  public func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn)
-    async throws
-    -> (Data, HTTPResponse)
+  public func request(request: inout HTTPRequest, payloadData: Data?, next: NextFn)
+    async throws -> (Data, HTTPResponse)
   {
-
+    
+    guard self.enabled else {
+      return try await next(&request, payloadData)
+    }
+    
     print(">>> request: \(request.method) - \(request.path ?? "")")
     
     if let payloadData, request.isContentTypeJSON {

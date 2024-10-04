@@ -15,9 +15,9 @@ final class http_clientTests: XCTestCase {
     }
   
     func testRequest() async throws {
-      let client = Client(
+      let client = HTTPClient(
         base: "httpbin.org",
-        middlewares: [ClientLogger()]
+        middlewares: [LoggerMiddleware()]
       )
 
       let request: Empty = try await client.request(.get, "/get")

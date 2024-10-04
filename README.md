@@ -3,7 +3,7 @@
 
 ## Install
 
-Install dependency
+Install the dependency
 
 ```
 dependencies: [
@@ -25,7 +25,7 @@ Add the dependency to the target
 ```swift
 import HTTPClient
 
-let client = Client(
+let client = HTTPClient(
       base: "api.example.com",
       middlewares: [
         ClientLogger(),
@@ -45,7 +45,7 @@ E.g.
 ```swift
 import HTTPClient
 
-class ClientAppAuth: Client.Middleware {
+class ClientAppAuth: HTTPClient.Middleware {
 
   private let appAuth: AppAuth
 
@@ -53,7 +53,7 @@ class ClientAppAuth: Client.Middleware {
     self.appAuth = appAuth
   }
 
-  func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn)
+  func request(request: inout HTTPRequest, payloadData: Data?, next: NextFn)
     async throws -> (Data, HTTPResponse)
   {
     let accessToken = try await appAuth.getAccessToken()

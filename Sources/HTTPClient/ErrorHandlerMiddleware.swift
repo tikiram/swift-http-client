@@ -1,14 +1,13 @@
 import Foundation
 import HTTPTypes
 
-final public class ClientErrorHandler: Client.Middleware {
+final public class ErrorHandlerMiddleware: HTTPClient.Middleware {
 
   public init() {
   }
 
-  public func request(request: inout HTTPRequest, payloadData: Data?, next: Client.NextFn)
-    async throws
-    -> (Data, HTTPResponse)
+  public func request(request: inout HTTPRequest, payloadData: Data?, next: NextFn)
+    async throws -> (Data, HTTPResponse)
   {
 
     let (data, response) = try await next(&request, payloadData)

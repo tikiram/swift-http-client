@@ -2,11 +2,11 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-final public class Client: Sendable {
+public typealias NextFn = (_ request: inout HTTPRequest, _ data: Data?) async throws -> (
+  Data, HTTPResponse
+)
 
-  public typealias NextFn = (_ request: inout HTTPRequest, _ data: Data?) async throws -> (
-    Data, HTTPResponse
-  )
+final public class HTTPClient: Sendable {
 
   public protocol Middleware: Sendable {
     func request(request: inout HTTPRequest, payloadData: Data?, next: NextFn) async throws -> (
