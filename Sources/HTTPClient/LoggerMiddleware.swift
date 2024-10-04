@@ -7,7 +7,7 @@ final public class LoggerMiddleware: HTTPClient.Middleware {
   // or it can be use an env variable (prod, dev, etc)
 
   private let enabled: Bool
-  
+
   public init(_ enabled: Bool = true) {
     self.enabled = enabled
   }
@@ -15,13 +15,13 @@ final public class LoggerMiddleware: HTTPClient.Middleware {
   public func request(request: inout HTTPRequest, payloadData: Data?, next: NextFn)
     async throws -> (Data, HTTPResponse)
   {
-    
+
     guard self.enabled else {
       return try await next(&request, payloadData)
     }
-    
+
     print(">>> request: \(request.method) - \(request.path ?? "")")
-    
+
     if let payloadData, request.isContentTypeJSON {
       let json = tryGetPrettyPrintedJSON(from: payloadData)
       print(json)
@@ -30,7 +30,7 @@ final public class LoggerMiddleware: HTTPClient.Middleware {
     do {
       let (data, response) = try await next(&request, payloadData)
       print("<<< response: \(response.status)")
-      
+
       if response.isContentTypeJSON {
         let json = tryGetPrettyPrintedJSON(from: data)
         print(json)
@@ -48,16 +48,16 @@ final public class LoggerMiddleware: HTTPClient.Middleware {
 private func tryGetPrettyPrintedJSON(from data: Data) -> String {
   if let json = getPrettyPrintedJSON(from: data) {
     return json
-  }
-  else {
+  } else {
     return String(data: data, encoding: .utf8) ?? "(nil)"
   }
 }
 
 private func getPrettyPrintedJSON(from data: Data) -> String? {
   if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers),
-     let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) {
-      return String(decoding: jsonData, as: UTF8.self)
+    let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+  {
+    return String(decoding: jsonData, as: UTF8.self)
   }
   return nil
 }

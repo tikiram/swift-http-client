@@ -13,5 +13,3 @@ extension HTTPResponse {
     return contentType?.contains("application/json") ?? false
   }
 }
-
-
