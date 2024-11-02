@@ -35,6 +35,13 @@ final public class LoggerMiddleware: HTTPClient.Middleware {
         let json = tryGetPrettyPrintedJSON(from: data)
         print(json)
       }
+      else {
+        print("response")
+        let contentType = response.headerFields[.contentType]
+        print(">> \(contentType ?? "")")
+        let output = String(data: data, encoding: .utf8) ?? "(nil)"
+        print(output)
+      }
 
       return (data, response)
     } catch {
