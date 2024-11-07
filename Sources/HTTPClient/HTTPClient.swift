@@ -56,6 +56,13 @@ final public class HTTPClient: Sendable {
     let path = pathWithQueryString ?? resourcePath
     let payloadData = try payload.map { try jsonEncoder.encode($0) }
 
+    
+//    let url = URL(string: "https://www.example.com/")
+//    if var url {
+//      let item = URLQueryItem(name: "q", value: "soccer")
+//      url.append(queryItems: [])
+//    }
+    
     var request = HTTPRequest(method: method, scheme: "https", authority: base, path: path)
     let _ = try await performRequest(&request, with: payloadData)
   }
