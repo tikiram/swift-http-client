@@ -35,13 +35,16 @@ final public class HTTPClient: Sendable {
     _ method: HTTPRequest.Method,
     _ resourcePath: String,
     payload: Encodable? = nil,
-    query: Encodable? = nil
+    query: Encodable? = nil,
+    payloadType: PayloadType = .json
   ) async throws -> T {
     let pathWithQueryString = query.map { resourcePath + "?" + toQueryString($0) }
     let path = pathWithQueryString ?? resourcePath
-    let payloadData = try payload.map { try jsonEncoder.encode($0) }
+    let payloadData = try payload.map { try getPayloadData($0, payloadType: payloadType) }
 
     var request = HTTPRequest(method: method, scheme: "https", authority: base, path: path)
+    request.headerFields[.contentType] = payloadType.getContentType()
+    
     let (data, _) = try await performRequest(&request, with: payloadData)
     return try jsonDecoder.decode(T.self, from: data)
   }
@@ -50,11 +53,12 @@ final public class HTTPClient: Sendable {
     _ method: HTTPRequest.Method,
     _ resourcePath: String,
     payload: Encodable? = nil,
-    query: Encodable? = nil
+    query: Encodable? = nil,
+    payloadType: PayloadType = .json
   ) async throws {
     let pathWithQueryString = query.map { resourcePath + "?" + toQueryString($0) }
     let path = pathWithQueryString ?? resourcePath
-    let payloadData = try payload.map { try jsonEncoder.encode($0) }
+    let payloadData = try payload.map { try getPayloadData($0, payloadType: payloadType) }
 
     
 //    let url = URL(string: "https://www.example.com/")
@@ -64,7 +68,22 @@ final public class HTTPClient: Sendable {
 //    }
     
     var request = HTTPRequest(method: method, scheme: "https", authority: base, path: path)
+    request.headerFields[.contentType] = payloadType.getContentType()
+    
     let _ = try await performRequest(&request, with: payloadData)
+  }
+  
+  private func getPayloadData(_ payload: Encodable, payloadType: PayloadType) throws -> Data {
+    switch payloadType {
+    case .json:
+      return try jsonEncoder.encode(payload)
+    case .urlencoded:
+      let string = toQueryString(payload)
+      guard let data = string.data(using: .utf8) else {
+        throw ClientError.payloadEncodingFailed
+      }
+      return data
+    }
   }
 
   private func performRequest(_ request: inout HTTPRequest, with data: Data?) async throws
@@ -89,7 +108,6 @@ final public class HTTPClient: Sendable {
     Data, HTTPResponse
   ) {
     if let data {
-      request.headerFields[.contentType] = "application/json"
       return try await URLSession.shared.upload(for: request, from: data)
     }
 
