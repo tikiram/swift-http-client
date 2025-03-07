@@ -1,6 +1,7 @@
 import Foundation
 
 // TODO: create custom encoder instead (?)
+// TODO: support camel to snake case
 func toQueryString(_ payload: Encodable) -> String {
   let mirror = Mirror(reflecting: payload)
 

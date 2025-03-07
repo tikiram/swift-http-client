@@ -22,9 +22,15 @@ final public class LoggerMiddleware: HTTPClient.Middleware {
 
     print(">>> request: \(request.method) - \(request.path ?? "")")
 
-    if let payloadData, request.isContentTypeJSON {
-      let json = tryGetPrettyPrintedJSON(from: payloadData)
-      print(json)
+    if let payloadData {
+      if request.isContentTypeJSON {
+        let json = tryGetPrettyPrintedJSON(from: payloadData)
+        print(json)
+      }
+      else {
+        let text = String(data: payloadData, encoding: .utf8)
+        print(text ?? "(nil)")
+      }
     }
 
     do {
